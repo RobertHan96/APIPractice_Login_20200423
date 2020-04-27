@@ -31,11 +31,14 @@ class SignUpActivity : BaseActivity() {
                     Log.d("서버응답JSON", json.toString())
                     val code = json.getInt("code")
                     if (code == 200) {
-                        val myIntent = Intent(mContext, MainActivity::class.java)
-                        startActivity(myIntent)
+//                        현재화면을 닫고 이전 화면으로 돌아가는 코드
+                        runOnUiThread {
+                            Toast.makeText(mContext, "회원 가입 성공!", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
                     } else {
                         runOnUiThread{
-                            Toast.makeText(mContext, "계정 정보 중복 다른 아이디를 사용해주세요.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext, "계정 정보 중복 : 다른 아이디를 사용해주세요.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
