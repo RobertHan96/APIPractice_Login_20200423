@@ -19,6 +19,32 @@ class ServerUtil {
 //        val BASE_URL = "http://api.tjeit.com" // 라이브주소
         val BASE_URL = "http://192.168.0.243:5000" // 개발용주소
 
+        fun putRequestSignUp(context: Context, id: String, pw: String, name:String, phone:String, handler: JsonResponseHandler?) {
+            val client = OkHttpClient()
+            val urlStr = "${BASE_URL}/auth"
+            val formBody = FormBody.Builder()
+                .add("login_id", id)
+                .add("password", pw)
+                .add("name", name)
+                .add("phone", phone)
+                .build()
+            val request = Request.Builder()
+                .url(urlStr)
+                .put(formBody)
+                .build()
+
+            client.newCall(request).enqueue(object  : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    val body = response.body!!.string()
+                    val json = JSONObject(body)
+                    handler?.onResponse(json)
+                }
+
+            })
+        }
 //        필요한 변수를 넣는 요령.
 //        화면에서 => 서버로 전달해야하는 데이터.
         fun postRequestLogin(context: Context, id:String, pw:String, handler:JsonResponseHandler?) {
